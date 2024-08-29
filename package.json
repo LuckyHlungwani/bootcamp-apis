@@ -25,7 +25,8 @@
   "contributors": [],
   "scripts": {
     "dev": "",
-    "test": "nodemon index.js"
+    "start": "node index.js",
+    "test": ""
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
