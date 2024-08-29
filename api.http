@@ -1,0 +1,25 @@
+POST https://bootcamp-apis.onrender.com/api/phonebill/total
+content-type: application/json
+
+{
+	"bill" : "call,call,call,sms,sms,call"
+}
+
+###
+
+POST https://bootcamp-apis.onrender.com/api/enough
+content-type: application/json
+
+{
+	"usage" : "call,sms,call,data",
+	"available" : 54
+}
+###
+
+POST https://bootcamp-apis.onrender.com/api/phonebill/price
+content-type: application/json
+
+{
+	"type" : "call",
+	"price" : 2.75
+}

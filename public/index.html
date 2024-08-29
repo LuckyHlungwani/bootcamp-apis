@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootcamp APIs</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Bootcamp APIs Widget</h1>
+
+    <div class="flex-model">
+
+        <div class="widget" x-data="{
+            sentence :'',
+            longestWord:'',
+            shortestWord:'',
+            wordLengths:'',
+        
+                checkSentence(){
+                    axios
+                    .get(`/api/word_game?sentence=${this.sentence}`)
+                    .then((result)=>{
+
+                        if(result.data.error){
+                            alert(result.data.error);
+                        }
+                        else{
+                            this.longestWord=result.data.longestWord;
+                            this.shortestWord=result.data.shortestWord;
+                            this.wordLengths=result.data.sum;
+                            setTimeout(()=>{
+                                this.sentence='';
+                                this.longestWord='';
+                                this.shortestWord='';
+                                this.wordLengths='';
+                            },7000);
+                        }
+                    });
+                }
+        }">
+
+        <h3>Word game widget</h3>
+            <div>
+                <input type="text" x-model="sentence" id="text" placeholder="Enter sentence">
+
+                    <button x-on:click="checkSentence">Analyse</button>
+            </div>
+            <div>
+                <div>
+                    Longest Word: <span x-text="longestWord"></span>
+                </div>
+                <div>
+                    Shortest Word: <span x-text="shortestWord"></span>
+                </div>
+                <div>
+                    Word Length: <span x-text="wordLengths"></span>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="widget" x-data="{
+            billStr:'',
+            billMessage:'',
+            phoneBill(){
+                axios.get(`/api/phonebill/prices?billStr=${this.billStr}`)
+                .then(result => {
+                    this.billMessage=result.data.bill;
+                    setTimeout(()=>{
+                        this.billMessage='';
+                        this.billStr = '';
+                    },5000);
+                    
+                });
+            }
+               
+            }">
+            <h3>Total phone bills</h3>
+            <div x-show="billMessage.length > 0" class="message" x-text="billMessage">
+                Your bill message will be displayed here....
+            </div>
+            <div class="input">
+                <label for="billStr">Enter projected usage: </label>
+                <input type="text" placeholder="call,sms" x-model="billStr" id="billStr">
+            </div>
+            <div class="cont"><button x-on:click="phoneBill()">Compute Bill</button></div>
+
+    </div>
+
+    <div class="widget" x-data="{
+        usage: '',
+        available: '',
+        billMessage: '',
+
+        enoughAirtimeBill(){
+            axios
+            .get(`/api/enough?usage=${this.usage}&available=${this.available}`)
+            .then(result => {
+                if(result.data.error){
+                    alert(result.data.error);
+                }
+                else{
+                    this.billMessage = result.data.totalBill;
+                setTimeout(()=>{
+                    this.billMessage='';
+                    this.usage = '';
+                    this.available = '';
+                },5000);
+                }
+            })
+        }
+    }">
+    <h3>Enough Airtime?</h3>
+            <div x-show="billMessage.length > 0" class="message" x-text="billMessage">
+                Your bill message will be displayed here....
+            </div>
+            <div class="input">
+                <label for="usage">Enter projected usage: </label>
+                <input type="text" placeholder="call,sms,data" x-model="usage" id="usage"><br><br>
+                <label for="available">Enter airtime available: </label>
+                <input type="number" placeholder="R0.00" x-model="available" id="available" min="0" oninput="this.value = Math.abs(this.value)">
+            </div>
+            <div class="cont"><button x-on:click="enoughAirtimeBill()">Compute Bill</button></div>
+    </div>
+    </div>
+</body>
+</html>
